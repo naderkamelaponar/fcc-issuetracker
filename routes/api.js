@@ -1,5 +1,5 @@
 'use strict';
-const { v4: uuidv4 } = require('uuid');
+const mongoose = require('mongoose');
 
 
 const issues =[
@@ -41,20 +41,16 @@ module.exports = function (app) {
       )
       let assigned_to=body["assigned_to"]||""
       let status_text=body["status_text"]||""
-      let id=uuidv4()
-      id=id.replaceAll("-","")
-      id=id.slice(3,27)
       body=body?{
         assigned_to,status_text,
         open:true,
-        _id:id,
+        _id:new mongoose.Types.ObjectId(),
         ...body,
         created_on:new Date(),
         updated_on:new Date()
       }:null
       issues[issues.indexOf(cPro[0])][project]=[body,...issues[issues.indexOf(cPro[0])][project]]
       console.log(issues[issues.indexOf(cPro[0])][project])
-      console.log("5871dda29faedc3491ff93bb".length,id.length)
       
       return res.send(body)
       
