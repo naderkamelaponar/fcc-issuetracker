@@ -41,17 +41,31 @@ module.exports = function (app) {
       )
       let assigned_to=body["assigned_to"]||""
       let status_text=body["status_text"]||""
-      body=body?{
-        assigned_to,status_text,
+      let _id=new mongoose.Types.ObjectId().toString()
+      body={
+        _id,
+        issue_title:body["issue_title"],
+        issue_text:body["issue_text"],
+        created_on:new Date().toISOString(),
+        updated_on:new Date().toISOString(),
+        created_by:body["created_by"],
+        assigned_to,
         open:true,
-        _id:new mongoose.Types.ObjectId(),
-        ...body,
-        created_on:new Date(),
-        updated_on:new Date()
-      }:null
+        status_text
+      }
       issues[issues.indexOf(cPro[0])][project]=[body,...issues[issues.indexOf(cPro[0])][project]]
       console.log(issues[issues.indexOf(cPro[0])][project])
-      
+      body={
+        assigned_to,
+        status_text,
+        open:true,
+        _id:body["_id"],
+        issue_title:body["issue_title"],
+        issue_text:body["issue_text"],
+        created_by:body["created_by"],
+        created_on:body["created_on"],
+        updated_on:body["updated_on"],
+      }
       return res.send(body)
       
     })
