@@ -1,4 +1,7 @@
 'use strict';
+const { v4: uuidv4 } = require('uuid');
+
+
 const issues =[
   {
     "apitest":
@@ -29,7 +32,31 @@ module.exports = function (app) {
     
     .post(function (req, res){
       let project = req.params.project;
+      let cPro=issues.filter(a=>{
+        return a[project]
+      })
+      cPro=cPro?cPro:null
+      let {body}=req  
+      if(!body["issue_title"] || !body["issue_text"] || !body["created_by"]) return res.send({ error: 'required field(s) missing' }
+      )
+      let assigned_to=body["assigned_to"]||""
+      let status_text=body["status_text"]||""
+      let id=uuidv4()
+      id=id.replaceAll("-","")
+      id=id.slice(3,27)
+      body=body?{
+        assigned_to,status_text,
+        open:true,
+        _id:id,
+        ...body,
+        created_on:new Date(),
+        updated_on:new Date()
+      }:null
+      issues[issues.indexOf(cPro[0])][project]=[body,...issues[issues.indexOf(cPro[0])][project]]
+      console.log(issues[issues.indexOf(cPro[0])][project])
+      console.log("5871dda29faedc3491ff93bb".length,id.length)
       
+      return res.send(body)
       
     })
     
