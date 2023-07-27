@@ -7,13 +7,13 @@ module.exports = function (app) {
 
     .get(async function (req, res) {
       let project = req.params.project;
-      const issues = await Issue.find({ ...req.query });
+      const issues = await Issue.find({ ...req.query});
       if (!issues) {
         return res
           .status(StatusCodes.NOT_FOUND)
           .send("No project called " + project + " found");
       }
-      issues = issues.map((d) => ({
+      const response = issues.map((d) => ({
         _id: d._id,
         issue_title: d.issue_title,
         issue_text: d.issue_text,
@@ -24,7 +24,7 @@ module.exports = function (app) {
         open: d.open,
         status_text: d.status_text
       }));
-      return res.status(StatusCodes.OK).json(issues);
+      return res.status(StatusCodes.OK).json(response);
     })
 
     .post(async function (req, res) {
