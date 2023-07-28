@@ -7,8 +7,7 @@ module.exports = function (app) {
 
     .get(async function (req, res) {
       const project = req.params.project;
-      req.query.project = project;
-      const issues = await Issue.find({ ...req.query });
+      const issues = await Issue.find({ ...req.query,project });
       if (!issues) {
         return res
           .status(StatusCodes.NOT_FOUND)
